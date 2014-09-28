@@ -1,3 +1,4 @@
 # Created by .gitignore support plugin (hsz.mobi)
-mybatis3-example.iml
+*.iml
 .idea
+log

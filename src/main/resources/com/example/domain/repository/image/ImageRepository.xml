@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.domain.repository.image.ImageRepository">
+    <insert id="create">
+        INSERT INTO
+          t_image
+        (
+          id
+          ,image_data
+          ,created_at
+        )
+        VALUES
+        (
+          #{id}
+          ,#{imageData,typeHandler=InputStreamTypeHandler}
+          ,#{createdAt}
+        )
+    </insert>
+    <select id="findOne" resultType="Image">
+        SELECT
+          id
+          ,image_data
+          ,created_at
+        FROM
+          t_image
+        WHERE
+          id = #{id}
+    </select>
+</mapper>
