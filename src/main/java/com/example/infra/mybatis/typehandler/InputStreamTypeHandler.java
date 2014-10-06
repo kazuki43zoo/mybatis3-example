@@ -2,13 +2,7 @@ package com.example.infra.mybatis.typehandler;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedJdbcTypes;
-import org.apache.ibatis.type.MappedTypes;
-import org.springframework.jdbc.support.lob.LobHandler;
 
-import javax.inject.Inject;
-import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
@@ -17,26 +11,22 @@ import java.sql.*;
  */
 public class InputStreamTypeHandler extends BaseTypeHandler<InputStream> {
 
-    @Inject
-    LobHandler lobHandler;
+    public InputStreamTypeHandler(){
+    }
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, InputStream parameter, JdbcType jdbcType) throws SQLException {
-        try {
-            lobHandler.getLobCreator().setBlobAsBinaryStream(ps,i,parameter,parameter.available());
-        } catch (IOException e) {
-            throw new SQLException(e);
-        }
+    public void setNonNullParameter(PreparedStatement ps, int i, final InputStream parameter, JdbcType jdbcType) throws SQLException {
+        ps.setBlob(i,parameter);
     }
 
     @Override
     public InputStream getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        return lobHandler.getBlobAsBinaryStream(rs, columnName);
+        return toInputStream(rs.getBlob(columnName));
     }
 
     @Override
     public InputStream getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        return lobHandler.getBlobAsBinaryStream(rs, columnIndex);
+        return toInputStream(rs.getBlob(columnIndex));
     }
 
     @Override

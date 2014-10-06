@@ -15,6 +15,8 @@ import org.springframework.util.StreamUtils;
 
 import javax.inject.Inject;
 import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,6 +44,9 @@ public class TypeHandlerTest {
             image.setCreatedAt(DateTime.now());
             imageRepository.create(image);
         }
+
+        printMethodList(ImageRepository.class);
+
 
         Image loadedImage = imageRepository.findOne(image.getId());
 
@@ -95,4 +100,21 @@ public class TypeHandlerTest {
 
     }
 
+
+    public static void printMethodList(Class<?> clazz) {
+        System.out.println();
+        System.out.println(clazz.getSimpleName());
+        Method[] interfaceMethods = clazz.getMethods();
+        for (Method method : interfaceMethods) {
+            System.out.println("  " + method);
+            System.out.println("    isSynthetic = " + method.isSynthetic() + ", isBridge = " + method.isBridge());
+            if (method.getAnnotations().length > 0) {
+                for (Annotation annotation : method.getAnnotations()) {
+                    System.out.println("    Annotation = " + annotation);
+                }
+            } else {
+                System.out.println("    NO ANNOTATIONS!");
+            }
+        }
+    }
 }

@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS t_account;
 CREATE TABLE t_image(
   id CHAR(36)
   ,image_data OID NOT NULL
+--    ,image_data BYTEA NOT NULL
   ,created_at TIMESTAMP NOT NULL
   ,CONSTRAINT t_image_pk PRIMARY KEY (id)
 );

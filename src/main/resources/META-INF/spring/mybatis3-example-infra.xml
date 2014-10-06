@@ -18,26 +18,19 @@
         </property>
     </bean>
 
-    <!--
-    <bean id="lobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler">
-        <property name="nativeJdbcExtractor">
-            <bean class="org.springframework.jdbc.support.nativejdbc.OracleJdbc4NativeJdbcExtractor" />
-        </property>
-    </bean>
-    -->
 
     <bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler">
 <!-- PostgreSQL
-        <property name="wrapAsLob" value="true" />
--->
+                <property name="wrapAsLob" value="true" />
+        -->
 <!-- Oracle
-        <property name="streamAsLob" value="true" />
 -->
+        <property name="streamAsLob" value="true" />
     </bean>
 
     <!-- scan for Mappers -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.example.domain.repository" />
+        <property name="basePackage" value="com.example.domain.repository.order" />
     </bean>
 
 </beans>

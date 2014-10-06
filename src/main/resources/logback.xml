@@ -72,7 +72,11 @@
         <level value="debug" />
     </logger>
 
-    <logger name="jdbc.resultset">
+    <!--<logger name="jdbc.resultset">-->
+        <!--<level value="debug" />-->
+    <!--</logger>-->
+
+    <logger name="jdbc.resultsettable">
         <level value="debug" />
     </logger>
 

@@ -5,6 +5,9 @@
 <configuration>
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false" />
+        <setting name="lazyLoadingEnabled" value="true" />
+
     </settings>
     <typeAliases>
         <package name="com.example.domain.model" />

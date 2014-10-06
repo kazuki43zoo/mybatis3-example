@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.domain.repository.order.OrderRepository">
+
+    <sql id="selectFromJoin">
+        SELECT
+            o.id,
+            o.status_code,
+            os.name AS status_name,
+            oi.quantity,
+            i.code AS item_code,
+            i.name AS item_name,
+            i.price AS item_price,
+            ct.code AS category_code,
+            ct.name AS category_name,
+            cp.code AS coupon_code,
+            cp.name AS coupon_name,
+            cp.price AS coupon_price
+        FROM
+            ${orderTable} o
+        INNER JOIN
+            c_order_status os ON os.code = o.status_code
+        INNER JOIN
+            t_order_item oi ON oi.order_id = o.id
+        INNER JOIN
+            m_item i ON i.code = oi.item_code
+        INNER JOIN
+            m_item_category ic ON ic.item_code = i.code
+        INNER JOIN
+            m_category ct ON ct.code = ic.category_code
+        LEFT JOIN
+            t_order_coupon oc ON oc.order_id = o.id
+        LEFT JOIN
+            m_coupon cp ON cp.code = oc.coupon_code
+    </sql>
+
+    <select id="findOne" parameterType="_int" resultMap="orderResultMap">
+        <bind name="orderTable" value="'t_order'" />
+        <include refid="selectFromJoin"/>
+        WHERE
+            o.id = #{id}
+        ORDER BY
+            item_code ASC,
+            category_code ASC,
+            coupon_code ASC
+    </select>
+
+    <select id="findPage" resultMap="orderResultMap">
+        <bind name="orderTable" value="
+            '(
+              SELECT
+                  *
+              FROM
+                  t_order
+              ORDER BY
+                  id DESC
+              LIMIT
+                  #{pageable.pageSize}
+              OFFSET
+                  #{pageable.offset}
+              )'" />
+        <include refid="selectFromJoin"/>
+        ORDER BY
+            id DESC,
+            item_code ASC,
+            category_code ASC,
+            coupon_code ASC
+    </select>
+
+    <resultMap id="orderResultMap" type="Order">
+        <id property="id" column="id"/>
+        <result property="orderStatus.code" column="status_code" />
+        <result property="orderStatus.name" column="status_name" />
+        <collection property="orderItems" ofType="OrderItem">
+            <id property="orderId" column="id"/>
+            <id property="item.code" column="item_code"/>
+            <result property="quantity" column="quantity"/>
+            <association property="item" resultMap="itemResultMap2"/>
+        </collection>
+        <collection property="orderCoupons" ofType="OrderCoupon"
+                    notNullColumn="coupon_code">
+            <id property="orderId" column="id"/>
+            <id property="coupon.code" column="coupon_code"/>
+            <result property="coupon.name" column="coupon_name"/>
+            <result property="coupon.price" column="coupon_price"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="itemResultMap" type="Item">
+        <id property="code" column="item_code"/>
+        <result property="name" column="item_name"/>
+        <result property="price" column="item_price"/>
+        <collection property="categories" ofType="Category">
+            <id property="code" column="category_code"/>
+            <result property="name" column="category_name"/>
+            <collection property="items" column="category_code"
+                        ofType="Item" fetchType="lazy"
+                        select="com.example.domain.repository.order.ItemRepository.findAllByCategoryCode"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="itemResultMap2" type="Item">
+        <id property="code" column="item_code"/>
+        <result property="name" column="item_name"/>
+        <result property="price" column="item_price"/>
+        <collection property="categories" column="item_code" fetchType="eager" select="findByItemCode" />
+    </resultMap>
+
+    <select id="findByItemCode" parameterType="string" resultType="Category">
+        SELECT
+            ct.code,
+            ct.name
+        FROM
+            m_item_category ic
+        INNER JOIN m_category ct ON ct.code = ic.category_code
+        WHERE
+            ic.item_code = #{itemCode}
+        ORDER BY
+            code
+    </select>
+
+    <!--<resultMap id="categoryResultMap" type="Category">-->
+        <!--<result property="code" column="category_code"/>-->
+        <!--<result property="name" column="category_name"/>-->
+        <!--<collection property="items" column="category_code"-->
+                    <!--ofType="Item" fetchType="lazy"-->
+                    <!--select="com.example.domain.repository.order.ItemRepository.findAllByCategoryCode"/>-->
+    <!--</resultMap>-->
+
+    <resultMap id="orderItemResultMap" type="OrderItem">
+        <id property="orderId" column="order_id"/>
+        <association property="item" column="item_code"
+                     fetchType="lazy" select="findByItemCode" />
+        <!-- ... -->
+    </resultMap>
+
+</mapper>

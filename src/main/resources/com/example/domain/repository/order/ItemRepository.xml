@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.domain.repository.order.ItemRepository">
+
+    <resultMap id="itemResultMap" type="Item">
+        <id property="code" column="code" />
+        <result property="name" column="name" />
+        <result property="price" column="price" />
+        <collection property="categories" column="code" ofType="Category" fetchType="lazy"
+            select="com.example.domain.repository.order.CategoryRepository.findAllByItemCode" />
+    </resultMap>
+
+    <select id="findOne" resultMap="itemResultMap">
+        SELECT
+            code,
+            name,
+            price
+        FROM
+            m_item
+        WHERE
+            code = #{code}
+    </select>
+
+    <select id="findAllByCategoryCode" resultMap="itemResultMap">
+        SELECT
+            i.code,
+            i.name,
+            i.price
+        FROM
+            m_item_category ic
+        INNER JOIN
+            m_item i ON i.code = ic.item_code
+        WHERE
+            ic.category_code = #{categoryCode}
+        ORDER BY
+            ic.item_code
+    </select>
+
+</mapper>
