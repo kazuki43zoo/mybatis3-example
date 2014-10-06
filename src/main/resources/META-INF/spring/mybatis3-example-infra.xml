@@ -24,13 +24,8 @@
                 <property name="wrapAsLob" value="true" />
         -->
 <!-- Oracle
--->
         <property name="streamAsLob" value="true" />
-    </bean>
-
-    <!-- scan for Mappers -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.example.domain.repository.order" />
+-->
     </bean>
 
 </beans>

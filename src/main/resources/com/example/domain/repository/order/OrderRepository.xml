@@ -76,7 +76,7 @@
             <id property="orderId" column="id"/>
             <id property="item.code" column="item_code"/>
             <result property="quantity" column="quantity"/>
-            <association property="item" resultMap="itemResultMap2"/>
+            <association property="item" resultMap="itemResultMap"/>
         </collection>
         <collection property="orderCoupons" ofType="OrderCoupon"
                     notNullColumn="coupon_code">

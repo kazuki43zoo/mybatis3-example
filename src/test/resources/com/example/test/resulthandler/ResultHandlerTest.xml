@@ -11,6 +11,12 @@
 
     <import resource="classpath*:META-INF/spring/mybatis3-example-infra.xml" />
 
+    <!-- scan for Mappers -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.example.domain.repository.account" />
+    </bean>
+
+
     <jdbc:initialize-database ignore-failures="DROPS">
         <jdbc:script location="classpath:database/${database}-schema.sql"/>
         <jdbc:script location="classpath:database/${database}-data.sql"/>

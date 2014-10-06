@@ -2,6 +2,7 @@ package com.example.test.mapping;
 
 import com.example.domain.model.*;
 import com.example.domain.repository.order.OrderRepository;
+import org.apache.ibatis.jdbc.SQL;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +23,31 @@ public class MappingTest {
     @Inject
     OrderRepository orderRepository;
 
+
     @Test
     public void findOneBy1() {
         Order order = orderRepository.findOne(1);
 
         assertOrderOf1(order);
 
+    }
+
+    @Test
+    public void findOneBy1_2() {
+        Order order = orderRepository.findOne(1);
+
+        List<Category> categories = order.getOrderItems().iterator().next().getItem().getCategories();
+        System.out.println("★★★★★★★★1");
+        Category category = categories.get(0);
+        System.out.println("★★★★★★★★2");
+        System.out.println(category.getCode());
+        System.out.println("★★★★★★★★3");
+//        List<Item> items = category.getItems();
+        System.out.println("★★★★★★★★4");
+//        Item item = items.get(0);
+        System.out.println("★★★★★★★★5");
+//        System.out.println(item.getCode());
+        System.out.println("★★★★★★★★6");
     }
 
     @Test
@@ -100,7 +120,7 @@ public class MappingTest {
         category = categories.get(0);
         assertThat(category.getCode(), is("CTG0000001"));
         assertThat(category.getName(), is("Drink"));
-        category.getItems();
+        System.out.println(category.getItems());
 
         orderItem = orderItems.get(1);
         item = orderItem.getItem();
@@ -168,7 +188,7 @@ public class MappingTest {
         category = categories.get(0);
         assertThat(category.getCode(), is("CTG0000001"));
         assertThat(category.getName(), is("Drink"));
-        category.getItems();
+        System.out.println(category.getItems());
 
         System.out.println("Assert Order Item 1 ...");
         orderItem = orderItems.get(1);
@@ -188,7 +208,7 @@ public class MappingTest {
         category = categories.get(1);
         assertThat(category.getCode(), is("CTG0000003"));
         assertThat(category.getName(), is("Hot selling"));
-        category.getItems();
+        System.out.println(category.getItems().iterator().next().toString());
 
 
     }

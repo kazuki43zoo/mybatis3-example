@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS t_image;
 DROP TABLE IF EXISTS t_text;
 DROP TABLE IF EXISTS t_account;
+DROP TABLE IF EXISTS t_account_address;
 DROP TABLE IF EXISTS t_order_item;
 DROP TABLE IF EXISTS t_order_coupon;
 DROP TABLE IF EXISTS t_order;
@@ -10,6 +11,7 @@ DROP TABLE IF EXISTS m_item;
 DROP TABLE IF EXISTS m_category;
 DROP TABLE IF EXISTS m_coupon;
 
+DROP TABLE IF EXISTS t_todo;
 
 CREATE TABLE t_image(
   id CHAR(36)
@@ -29,6 +31,13 @@ CREATE TABLE t_account(
   ,birth_date TIMESTAMP
   ,CONSTRAINT t_account_pk PRIMARY KEY (account_uuid)
 );
+CREATE TABLE t_account_address(
+   account_uuid CHAR(36)
+  ,zip_code CHAR(7)
+  ,address  NVARCHAR2(256)
+  ,CONSTRAINT t_account_address_pk PRIMARY KEY (account_uuid)
+);
+
 
 CREATE TABLE m_item (
     code CHAR(10),
@@ -89,6 +98,15 @@ CREATE TABLE t_order_coupon (
         FOREIGN KEY(order_id) REFERENCES t_order(id),
     CONSTRAINT t_order_coupon_fk_item_code
         FOREIGN KEY(coupon_code) REFERENCES m_coupon(code),
+);
+
+CREATE TABLE t_todo(
+   todo_id CHAR(36)
+  ,title NVARCHAR(256)
+  ,finished BOOLEAN
+  ,created_at TIMESTAMP
+  ,version BIGINT
+  ,CONSTRAINT t_todo_pk PRIMARY KEY (todo_id)
 );
 
 COMMIT;
