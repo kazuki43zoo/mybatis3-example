@@ -348,4 +348,34 @@ public class ExecuteTypeTest {
         assertThat(result, is(false));
 
     }
+
+    @Test
+    @Transactional
+    public void batchGenKey() {
+
+        Todo todo = new Todo();
+        todo.setTitle("title");
+        todo.setCreatedAt(new Date());
+        todo.setFinished(false);
+        todo.setVersion(1);
+        todoBatchRepository.createWithGenKey(todo);
+
+        Todo todo2 = new Todo();
+        todo2.setTitle("title");
+        todo2.setCreatedAt(new Date());
+        todo2.setFinished(false);
+        todo2.setVersion(1);
+        todoBatchRepository.createWithGenKey(todo2);
+
+
+        assertNotNull(todo.getTodoId());
+        assertNotNull(todo2.getTodoId());
+
+        Todo loadedTodo = todoBatchRepository.findOne(todo.getTodoId());
+        Todo loadedTodo2 = todoBatchRepository.findOne(todo2.getTodoId());
+
+        assertNotNull(loadedTodo);
+        assertNotNull(loadedTodo2);
+    }
+
 }

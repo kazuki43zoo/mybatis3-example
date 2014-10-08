@@ -21,6 +21,12 @@ public interface TodoRepository extends Repository {
     @Insert({"INSERT INTO t_todo",
             "(todo_id, title, finished, created_at, version)",
             "VALUES(#{todoId},#{title},#{finished},#{createdAt},#{version})"})
+    @SelectKey(statement = "SELECT RANDOM_UUID()", before = true, keyProperty = "todoId", resultType = String.class)
+    boolean createWithGenKey(Todo todo);
+
+    @Insert({"INSERT INTO t_todo",
+            "(todo_id, title, finished, created_at, version)",
+            "VALUES(#{todoId},#{title},#{finished},#{createdAt},#{version})"})
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     boolean createOnNewTransaction(Todo todo);
 
