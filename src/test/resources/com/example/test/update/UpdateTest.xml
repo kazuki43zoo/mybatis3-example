@@ -14,13 +14,11 @@
     <import resource="classpath*:META-INF/spring/mybatis3-example-infra.xml"/>
 
     <!-- register Repositories -->
-    <mybatis:scan base-package="com.example.domain.repository.text"/>
-
-    <!-- scan for Mappers -->
-    <mybatis:scan base-package="com.example.domain.repository.image"/>
+    <mybatis:scan base-package="com.example.domain.repository.todo"/>
 
     <jdbc:initialize-database ignore-failures="DROPS">
         <jdbc:script location="classpath:database/${database}-schema.sql"/>
+        <jdbc:script location="classpath:database/${database}-data.sql"/>
     </jdbc:initialize-database>
 
 

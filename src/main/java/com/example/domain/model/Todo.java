@@ -1,17 +1,20 @@
 package com.example.domain.model;
 
+import org.springframework.data.domain.Auditable;
+
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by shimizukazuki on 2014/10/08.
  */
-public class Todo {
+public class Todo extends AbstractEntity<String> {
 
     private String todoId;
     private String title;
     private boolean finished;
     private Date createdAt;
-    private long version;
 
     public String getTodoId() {
         return todoId;
@@ -45,11 +48,9 @@ public class Todo {
         this.createdAt = createdAt;
     }
 
-    public long getVersion() {
-        return version;
+    @Override
+    public String getId() {
+        return getTodoId();
     }
 
-    public void setVersion(long version) {
-        this.version = version;
-    }
 }

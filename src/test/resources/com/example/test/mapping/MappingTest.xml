@@ -3,19 +3,18 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
 
-    <context:property-placeholder location="classpath*:META-INF/spring/*.properties" />
+    <context:property-placeholder
+            location="classpath*:META-INF/spring/*.properties"/>
 
-    <import resource="classpath*:META-INF/spring/mybatis3-example-infra.xml" />
+    <import resource="classpath*:META-INF/spring/mybatis3-example-infra.xml"/>
 
     <!-- scan for Mappers -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.example.domain.repository.order" />
-    </bean>
-
+    <mybatis:scan base-package="com.example.domain.repository.order"/>
 
     <jdbc:initialize-database ignore-failures="DROPS">
         <jdbc:script location="classpath:database/${database}-schema.sql"/>

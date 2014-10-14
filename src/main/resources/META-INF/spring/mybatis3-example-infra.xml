@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
     <import resource="classpath:/META-INF/spring/mybatis3-example-env.xml" />
+
+    <bean id="databaseIdProvider"
+          class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+        <property name="properties">
+            <props>
+                <prop key="H2">h2</prop>
+                <prop key="PostgreSQL">postgresql</prop>
+            </props>
+        </property>
+    </bean>
 
     <!-- define the SqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -16,6 +27,7 @@
                 <bean class="com.example.infra.mybatis.typehandler.ReaderTypeHandler" />
             </list>
         </property>
+        <property name="databaseIdProvider" ref="databaseIdProvider"/>
     </bean>
 
 

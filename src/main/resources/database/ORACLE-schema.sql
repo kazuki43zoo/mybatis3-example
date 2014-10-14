@@ -26,5 +26,13 @@ CREATE TABLE t_account_address(
   ,address  NVARCHAR2(256)
   ,CONSTRAINT t_account_address_pk PRIMARY KEY (account_uuid)
 );
+CREATE TABLE t_todo(
+   todo_id CHAR(36)
+  ,title VARCHAR(256)
+  ,finished CHAR (1)
+  ,created_at TIMESTAMP
+  ,version NUMBER
+  ,CONSTRAINT t_todo_pk PRIMARY KEY (todo_id)
+);
 
 COMMIT;

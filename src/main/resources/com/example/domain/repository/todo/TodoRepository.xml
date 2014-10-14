@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.domain.repository.todo.TodoRepository">
+
+    <insert id="create" parameterType="Todo">
+        <selectKey keyProperty="todoId" resultType="string" order="BEFORE"
+                   databaseId="h2">
+            SELECT RANDOM_UUID()
+
+        </selectKey>
+        <selectKey keyProperty="todoId" resultType="string" order="BEFORE"
+                   databaseId="postgresql">
+            SELECT UUID_GENERATE_V4()
+        </selectKey>
+        INSERT INTO
+        t_todo
+        (
+        todo_id
+        ,title
+        ,finished
+        ,created_at
+        ,version
+        )
+        VALUES
+        (
+        #{todoId}
+        ,#{title}
+        ,#{finished}
+        ,#{createdDate}
+        ,#{version}
+        )
+    </insert>
+    <update id="update">
+        UPDATE
+          t_todo
+        SET
+            finished = #{finished},
+            version = version + 1
+        WHERE
+            todo_id = #{todoId}
+    </update>
+
+    <update id="updateFinishedByTodIds">
+        UPDATE
+        t_todo
+        SET
+        finished = #{finished},
+        version = version + 1
+        WHERE
+        <foreach item="todoId" collection="todoIds"
+                 open="todo_id IN (" separator="," close=")">
+            #{todoId}
+        </foreach>
+    </update>
+    <delete id="deleteOlderFinishedTodo" parameterType="date">
+        <![CDATA[
+
+
+        DELETE FROM
+            t_todo
+        WHERE
+            finished = TRUE
+        AND
+            created_at  < #{criteriaDate}
+
+
+        ]]>
+    </delete>
+    <select id="findByFnished" resultSets="todo1,todo2"
+            resultMap="todoResultMap">
+        SELECT
+            todo_id,
+            title,
+            finished,
+            created_at,
+            version
+        FROM
+            t_todo
+        WHERE
+            finished = false
+        ORDER BY
+            todo_id;
+
+        SELECT
+            todo_id,
+            title,
+            finished,
+            created_at,
+            version
+        FROM
+            t_todo
+        WHERE
+            finished = true
+        ORDER BY
+            todo_id;
+
+    </select>
+
+    <resultMap id="todoResultMap" type="Todo">
+        <id property="todoId" column="todo_id"/>
+    </resultMap>
+
+    <select id="findAllByCreatedAtBefore" parameterType="_int"
+            resultType="Todo">
+        SELECT
+        todo_id,
+        title,
+        finished,
+        created_at,
+        version
+        FROM
+        t_todo
+        WHERE
+        <choose>
+            <when test="_databaseId == 'h2'">
+                <bind name="criteriaDate"
+                      value="'DATEADD(\'DAY\',#{days} * -1,#{currentDate})'"/>
+            </when>
+            <when test="_databaseId == 'postgresql'">
+                <bind name="criteriaDate"
+                      value="'#{currentDate}::DATE - (#{days} * INTERVAL \'1 DAY\')'"/>
+            </when>
+        </choose>
+        <![CDATA[
+                created_at < ${criteriaDate}
+            ]]>
+    </select>
+
+    <select id="findOne" parameterType="string" resultType="Todo"
+            statementType="CALLABLE">
+        {call findTodo(#{todoId})}
+    </select>
+    <select id="findAll" resultMap="resultMapForFindAll">
+        SELECT
+           *
+        FROM
+           t_todo
+        ORDER BY
+           todo_id
+    </select>
+
+    <resultMap id="resultMapForFindAll" type="Todo">
+        <id property="todoId" column="todo_id" />
+   </resultMap>
+
+
+
+</mapper>

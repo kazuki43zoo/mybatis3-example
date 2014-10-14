@@ -13,9 +13,32 @@
         <property name="password" value="${database.password}" />
         <property name="defaultAutoCommit" value="false" />
     </bean>
-
     <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
         <constructor-arg index="0" ref="realDataSource" />
+    </bean>
+
+    <bean id="h2RealDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${database.H2.driverClassName}" />
+        <property name="url" value="${database.H2.url}" />
+        <property name="username" value="${database.H2.username}" />
+        <property name="password" value="${database.H2.password}" />
+        <property name="defaultAutoCommit" value="false" />
+    </bean>
+    <bean id="h2DataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg index="0" ref="h2RealDataSource" />
+    </bean>
+
+    <bean id="postgresqlRealDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${database.POSTGRESQL.driverClassName}" />
+        <property name="url" value="${database.POSTGRESQL.url}" />
+        <property name="username" value="${database.POSTGRESQL.username}" />
+        <property name="password" value="${database.POSTGRESQL.password}" />
+        <property name="defaultAutoCommit" value="false" />
+    </bean>
+    <bean id="postgresqlDataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg index="0" ref="postgresqlRealDataSource" />
     </bean>
 
     <bean id="transactionManager"
