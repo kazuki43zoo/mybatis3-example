@@ -53,4 +53,12 @@ INSERT INTO t_todo VALUES ('4d3c8bdd-5379-4aeb-bc56-fcb01eb7cca7','title7',true 
 INSERT INTO t_todo VALUES ('4d3c8bdd-5379-4aeb-bc56-fcb01eb7cca8','title8',false ,'2014-02-06 23:59:59.999',8);
 INSERT INTO t_todo VALUES ('4d3c8bdd-5379-4aeb-bc56-fcb01eb7cca9','title9',true ,'2014-02-07 00:00:00.001',9);
 INSERT INTO t_todo VALUES ('4d3c8bdd-5379-4aeb-bc56-fcb01eb7cc10','title10',false ,'2014-02-08 00:00:00.000',10);
+
+
+
+INSERT INTO m_stock VALUES ('ITM0000001',101,1);
+INSERT INTO m_stock VALUES ('ITM0000002',200,1);
+INSERT INTO m_stock VALUES ('ITM0000003',300,1);
+INSERT INTO m_stock VALUES ('ITM0000004',400,2);
+
 COMMIT;

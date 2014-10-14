@@ -10,8 +10,8 @@ DROP TABLE IF EXISTS m_item_category;
 DROP TABLE IF EXISTS m_item;
 DROP TABLE IF EXISTS m_category;
 DROP TABLE IF EXISTS m_coupon;
-
 DROP TABLE IF EXISTS t_todo;
+DROP TABLE IF EXISTS m_stock;
 
 CREATE TABLE t_image(
   id CHAR(36)
@@ -108,5 +108,13 @@ CREATE TABLE t_todo(
   ,version BIGINT
   ,CONSTRAINT t_todo_pk PRIMARY KEY (todo_id)
 );
+
+CREATE TABLE m_stock (
+  item_code CHAR(10),
+  quantity INTEGER,
+  version BIGINT,
+  CONSTRAINT m_stock_pk PRIMARY KEY(item_code)
+);
+
 
 COMMIT;
